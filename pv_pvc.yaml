@@ -1,0 +1,42 @@
+# Static provisioning
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: b2-pv
+spec:
+  capacity:
+    storage: 1200Gi # Ignored, required
+  accessModes:
+    - ReadWriteMany # Supported options: ReadWriteMany / ReadOnlyMany
+  storageClassName: "" # Required for static provisioning
+  claimRef: # To ensure no other PVCs can claim this PV
+    namespace: default # Namespace is required even though it's in "default" namespace.
+    name: b2-pvc # Name of your PVC
+  mountOptions:
+    # By default, files and directories in the bucket are be readable only by 
+    # the local user that mounted the bucket (root in this case), so we need
+    # to specify allow-other so that non-root users such as nginx can read them.
+    - allow-other
+    # You can allow deletes on objects in the bucket if you wish
+    # - allow-delete
+    - endpoint-url https://s3.us-west-004.backblazeb2.com
+    - region us-west-004
+    - prefix some_prefix/
+  csi:
+    driver: s3.csi.aws.com # Required
+    volumeHandle: s3-csi-driver-volume # Must be unique
+    volumeAttributes:
+      bucketName: your-bucket-name
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: b2-pvc
+spec:
+  accessModes:
+    - ReadWriteMany # Supported options: ReadWriteMany / ReadOnlyMany
+  storageClassName: "" # Required for static provisioning
+  resources:
+    requests:
+      storage: 1200Gi # Ignored, required
+  volumeName: b2-pv # Name of your PV
