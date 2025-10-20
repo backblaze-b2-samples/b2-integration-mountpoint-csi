@@ -230,3 +230,7 @@ The [Mountpoint CSI driver's troubleshooting guide](https://github.com/awslabs/m
 ## Next Steps
 
 The Mountpoint CSI driver's GitHub repository contains several example manifests showing how to use features such as caching, running as a non-root user, and accessing multiple buckets from a single pod. See the [Static Provisioning Example directory](https://github.com/awslabs/mountpoint-s3-csi-driver/tree/main/examples/kubernetes/static_provisioning).
+
+## License
+
+This project is licensed under the Apache-2.0 License. It builds on the static provisioning example in the similarly licensed [Mountpoint for Amazon S3 CSI Driver](https://github.com/awslabs/mountpoint-s3-csi-driver) project.
